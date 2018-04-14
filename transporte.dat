@@ -1,0 +1,50 @@
+#*****************************
+#	 Modelo Ejemplo AMPL
+#	Modelo de Transporte
+#	Archivos: 	transporte.mod
+#				transporte.dat
+#*****************************
+data;
+
+set clientes := 
+Cliente1
+Cliente2
+Cliente3
+Cliente4
+Cliente5
+Cliente6
+Cliente7
+Cliente8
+Cliente9
+Cliente10;
+
+set bodegas:= Bodega1 Bodega2 Bodega3;
+
+param P := 2;
+
+param M := 10000;
+
+param d := 
+Cliente1 	72
+Cliente2 	96
+Cliente3 	44
+Cliente4 	89
+Cliente5 	21
+Cliente6 	41
+Cliente7 	97
+Cliente8	75
+Cliente9	51
+Cliente10	32 ;
+
+param c :	
+			Bodega1	Bodega2	Bodega3 := 
+Cliente1	378		567		1488
+Cliente2	1291	1196	919
+Cliente3	801		1478	1385
+Cliente4	722		999		536
+Cliente5	939		835		1497
+Cliente6	1329	1295	1228
+Cliente7	904		950		800
+Cliente8	746		1450	1175
+Cliente9	156		718		308
+Cliente10	123		163		771 ;

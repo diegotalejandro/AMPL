@@ -1,0 +1,20 @@
+Gurobi 7.0.0: optimal solution; objective 413897
+15 simplex iterations
+plus 11 simplex iterations for intbasis
+Suma_Costos = 413897
+
+x [*,*]
+:         Bodega1 Bodega2 Bodega3    :=
+Cliente1     72       0       0
+Cliente10    32       0       0
+Cliente2      0       0      96
+Cliente3     44       0       0
+Cliente4      0       0      89
+Cliente5     21       0       0
+Cliente6      0       0      41
+Cliente7      0       0      97
+Cliente8     75       0       0
+Cliente9     51       0       0
+;
+
+ampl: 
