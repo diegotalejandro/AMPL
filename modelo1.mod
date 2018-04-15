@@ -54,7 +54,7 @@ minimize Suma_Costos:
 	sum{d in dias} (G_fab[d]*I_fab[d]+G_may[d]*I_may[d]+G_dist[d]*I_dist[d)) +#almacenaje
 	sum{d in dias} (y[d]*w[d]) + sum{d in dias} (z[d]*v[d]);#envio
 	
-#Restricciones
+#Restricciones--------------------------------------------------------
 #No superar capacidad de almacenaje
 subject to no_superar_capacidad_fab {d in dias}:
 	x[d]+I_fab[d]<=B_fab;
@@ -62,7 +62,7 @@ subject to no_superar_capacidad_may {d in dias}:
 	x[d]+I_may[d]<=B_may;
 subject to no_superar_capacidad_dist {d in dias}:
 	x[d]+I_dist[d]<=B_dist;
-#almacen dia 1 igual al dia 30
+#almacen dia 1 igual al dia 30 todos
 
 subject to alamcenaje_inicial_fab:
 	I_fab[1]==I_fab[30];
@@ -70,14 +70,16 @@ subject to alamcenaje_inicial_may:
 	I_may[1]==I_may[30];
 subject to alamcenaje_inicial_dist:
 	I_dist[1]==I_dist[30];
-#almacenaje inicial
+#almacenaje inicial y final mayorista
 
-subject to alamcenaje_inicial:
-	y[1]==E;
+subject to alamcenaje_inicial_may:
+	I_may[1]+E-z[1]<=B_may;
+subject to alamcenaje_final_may:
+	I_may[30]>=E;
 #capacidad de  produccion
 
-subject to Cap_prod:
+subject to Cap_prod{d in dias}:
 	x[d]<=P[d];
 #max de envio
-subject to max_envio_fab_may:
+subject to max_envio_fab_may{d in dias}:
 	y[d]<=B_may;
