@@ -102,4 +102,6 @@ subject to updateI_dist{d in dias: d <30}:
 	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];#cumple la demanda
 	
 	subject to haberqpasa{d in dias}:
-	x[d]>y[d]>z[d];
+	x[d]>y[d];
+	subject to haberqpasa2{d in dias}:
+	y[d]>z[d];
