@@ -57,11 +57,11 @@ minimize Suma_Costos:
 #No superar capacidad de almacenaje-----------------------------------
 
 subject to no_superar_capacidad_fab {d in dias}:
-	x[d]+I_fab[d]<=B_fab;
+	/*x[d]+*/I_fab[d]<=B_fab;
 subject to no_superar_capacidad_may {d in dias: d<=30}:
-	y[d]+I_may[d]<=B_may;
+	/*y[d]+*/I_may[d]<=B_may;
 subject to no_superar_capacidad_dist {d in dias: d<=30}:
-	z[d]+I_dist[d]<=B_dist;
+	/*z[d]+*/I_dist[d]<=B_dist;
 
 #almacen dia 1 igual al dia 30 todos-------------------------------------
 
@@ -76,8 +76,8 @@ subject to alamcenaje_inicial_dist:
 
 subject to alamcenaje_inicial_may_cond:
 	I_may[1]+E-z[1]<=B_may;
-subject to alamcenaje_final_may:
-	I_may[30]>=E;
+/*subject to alamcenaje_final_may:
+	I_may[30]>=E;*/
 
 #almacenaje inicial todo
 
@@ -100,8 +100,6 @@ subject to updateI_may{d in dias: d <30}:
 	I_may[d+1]==I_may[d]+y[d]-z[d];
 subject to updateI_dist{d in dias: d <30}:
 	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];#cumple la demanda
-	
-	subject to haberqpasa{d in dias}:
-	x[d]>y[d];
-	subject to haberqpasa2{d in dias}:
-	y[d]>z[d];
+#demanda--------------------
+subject to cumplir_demand{d in dias}:
+	demanda[d]<=z[d]+I_dist[d];
