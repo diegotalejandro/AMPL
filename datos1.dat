@@ -254,6 +254,9 @@ param B_fab := 5000;
 param B_may := 10000;
 param B_dist := 3000;
 param E := 10000;
+var I_fab[1]:= 2000;
+var I_may[1]:= 3000;
+var I_dist[1]:= 500;
 /*
 param d :=
 Cliente1  72

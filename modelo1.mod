@@ -58,10 +58,10 @@ minimize Suma_Costos:
 
 subject to no_superar_capacidad_fab {d in dias}:
 	x[d]+I_fab[d]<=B_fab;
-subject to no_superar_capacidad_may {d in dias: d<30}:
-	y[d]+I_may[d+1]<=B_may;
-subject to no_superar_capacidad_dist {d in dias: d<30}:
-	z[d]+I_dist[d+1]<=B_dist;
+subject to no_superar_capacidad_may {d in dias: d<=30}:
+	y[d]+I_may[d]<=B_may;
+subject to no_superar_capacidad_dist {d in dias: d<=30}:
+	z[d]+I_dist[d]<=B_dist;
 
 #almacen dia 1 igual al dia 30 todos-------------------------------------
 
@@ -99,4 +99,4 @@ subject to updateI_fab{d in dias: d <30}:
 subject to updateI_may{d in dias: d <30}:
 	I_may[d+1]==I_may[d]+y[d]-z[d];
 subject to updateI_dist{d in dias: d <30}:
-	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];
+	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];#cumple la demanda
