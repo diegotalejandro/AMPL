@@ -1,0 +1,21 @@
+#*****************************
+#	 Modelo Ejemplo AMPL
+#	Modelo de Transporte
+#	Archivos: 	transporte.mod
+#				transporte.dat
+#				transporte.run				
+#*****************************
+
+/* En este archivo se muestra un pequeño scrip para correr el ejemplo, 
+configurar el solver gurobi y escribir las soluciones a un archivo de salida
+*/
+
+model transporte.mod;  #Cargamos el modelo
+data transporte.dat;	#Cargamos el archivo de datos
+option solver gurobi;				#Elegimos el solver Gurobi
+option gurobi_options "outlev 1";	#Configuracion de opcion de Gurobi para que muestre el log
+option log_file salida.txt;			#Guardamos la salida en el archivo salida.txt
+solve;								#Solucionar el modelo
+display Suma_Costos;				#Ejemplo de como mostrar el valor de la función objetivo
+display x;							#Ejemplo de como mostrar el valor de una variable
+close;								#cerrar el archivo de log para que se guarde

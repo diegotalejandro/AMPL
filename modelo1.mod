@@ -23,9 +23,7 @@ param B_fab;#capacidad de almacenamiento
 param B_may;#capacidad de mayorista
 param B_dist;#capacidad de distribuidor
 param demanda{d in dias};#demanda diaria comercio minorista
-param I_fab;#Litros almacendados en las bodegas fabrica
-param I_may;#Litros almacendados en las bodegas mayoristas
-param I_dist;#Litros almacendados en las bodegas distribuidora
+
 param E;#despacho inicial desde fabrica a mayorista
 param C_d {d in dias};#costo por litro producido el dia d
 param G_fab {d in dias};#costo por cada litro almacenado fabrica
@@ -44,15 +42,15 @@ Se definen las variables y su naturaleza en al mismo tiempo
 var x {d in dias} >= 0;#cuanto se produce por el dia d
 var y {d in dias} >= 0;#cuanto se envia al mayorista el dia d
 var z {d in dias} >= 0;#cuanto se envia al distribuidor el dia d
-
+var I_fab {d in dias} >= 0;#Litros almacendados en las bodegas fabrica
+var I_may {d in dias} >= 0;#Litros almacendados en las bodegas mayoristas
+var I_dist {d in dias} >= 0;#Litros almacendados en las bodegas distribuidora
 /*Funcion Objetivo
  	Min sum(i, sum(j, c_ij*x_ij ))
 */
 
 minimize Suma_Costos: 
-	sum{d in dias} (C[d]*x[d]) + #Produccion
-	sum{d in dias} (G_fab[d]*I_fab[d]+G_may[d]*I_may[d]+G_dist[d]*I_dist[d)) +#almacenaje
-	sum{d in dias} (y[d]*w[d]) + sum{d in dias} (z[d]*v[d]);#envio
+	sum{d in dias} C_d[d]*x[d] + sum{d in dias} (G_fab[d]*I_fab[d]+G_may[d]*I_may[d]+G_dist[d]*I_dist[d]) +sum{d in dias} (y[d]*w[d]) + sum{d in dias} (z[d]*v[d]);#envio
 	
 #Restricciones--------------------------------------------------------
 
@@ -76,17 +74,29 @@ subject to alamcenaje_inicial_dist:
 
 #almacenaje inicial y final mayorista--------------------------------------
 
-subject to alamcenaje_inicial_may:
+subject to alamcenaje_inicial_may_cond:
 	I_may[1]+E-z[1]<=B_may;
 subject to alamcenaje_final_may:
 	I_may[30]>=E;
+
+#almacenaje inicial todo
+
+subject to almacenaje_inicial_dato_fab:
+	I_fab[1]==2000;
+subject to almacenaje_inicial_dato_may:
+	I_may[1]==3000;
+subject to almacenaje_inicial_dato_dist:
+	I_dist[1]==500;
 
 #capacidad de  produccion-----------------------------------------------
 
 subject to Cap_prod{d in dias}:
 	x[d]<=P[d];
 
-#max de envio----------------------------------------------------------
-
-subject to max_envio_fab_may{d in dias}:
-	y[d]<=B_may;
+#update inventario----------------------------------------------------------
+subject to updateI_fab{d in dias: d+1 <=30}:
+	I_fab[d+1]==I_fab[d]+x[d]-y[d];
+subject to updateI_may{d in dias: d+1 <=30}:
+	I_may[d+1]==I_may[d]+y[d]-z[d];
+subject to updateI_dist{d in dias: d+1 <=30}:
+	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];
