@@ -58,26 +58,26 @@ minimize Suma_Costos:
 
 subject to no_superar_capacidad_fab {d in dias}:
 	/*x[d]+*/I_fab[d]<=B_fab;
-subject to no_superar_capacidad_may {d in dias: d<=30}:
+subject to no_superar_capacidad_may {d in dias: d<=10}:
 	/*y[d]+*/I_may[d]<=B_may;
-subject to no_superar_capacidad_dist {d in dias: d<=30}:
+subject to no_superar_capacidad_dist {d in dias: d<=10}:
 	/*z[d]+*/I_dist[d]<=B_dist;
 
 #almacen dia 1 igual al dia 30 todos-------------------------------------
 
 subject to alamcenaje_inicial_fab:
-	I_fab[1]==I_fab[30];
+	I_fab[1]==I_fab[10];
 subject to alamcenaje_inicial_may:#cambio!!!!!!!!!!!!!-!!!
-	I_may[1]==I_may[30];
+	I_may[1]==I_may[10];
 subject to alamcenaje_inicial_dist:
-	I_dist[1]==I_dist[30];
+	I_dist[1]==I_dist[10];
 
 #almacenaje inicial y final mayorista--------------------------------------
 
 subject to alamcenaje_inicial_may_cond:
 	I_may[1]+E-z[1]<=B_may;
 	subject to envio_planificado:
-	I_fab[29]==I_fab[28]+x[28]-y[28]-E;
+	I_fab[9]==I_fab[8]+x[8]-y[8]-E;
 
 #almacenaje inicial todo
 
@@ -94,13 +94,13 @@ subject to Cap_prod{d in dias}:
 	x[d]<=P[d];
 
 #update inventario----------------------------------------------------------
-subject to updateI_fab{d in dias: d<30 && d!=28}:
+subject to updateI_fab{d in dias: d<10 && d!=8}:
 	I_fab[d+1]==I_fab[d]+x[d]-y[d];
 	/*subject to updateI_may{d in dias: 1<=d <=2}:#cambio!!!!!!!!!!!!
 	I_may[d+1]==I_may[d]-z[d];*/
-subject to updateI_may2{d in dias: 1<d <30}:#cambio!!!!!!!!!!!!
+subject to updateI_may2{d in dias: 1<d <10}:#cambio!!!!!!!!!!!!
 	I_may[d+1]==I_may[d]+y[d-1]-z[d];
-subject to updateI_dist{d in dias: d <30}:
+subject to updateI_dist{d in dias: d <10}:
 	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];#cumple la demanda
 #demanda--------------------
 subject to cumplir_demand{d in dias}:
@@ -109,19 +109,3 @@ subject to envio_max_y{d in dias:d>2 }:
 	y[d-2]+I_may[d]<= B_may+z[d];
 subject to envio_max_z{d in dias}:
 	z[d]+I_dist[d]<=B_dist+demanda[d];
-subject to naturalezax {d in dias}:
-	x[d]>=0;
-	subject to naturalezay {d in dias}:
-	y[d]>=0;
-	subject to naturalezaz {d in dias}:
-	z[d]>=0;
-	subject to naturalezaIfab {d in dias}:
-	I_fab[d]>=0;
-	subject to naturalezaImay {d in dias}:
-	I_may[d]>=0;
-	subject to naturalezaIdist {d in dias}:
-	I_dist[d]>=0;
-		
-	
-	
-	

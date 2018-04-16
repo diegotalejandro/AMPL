@@ -58,9 +58,9 @@ minimize Suma_Costos:
 
 subject to no_superar_capacidad_fab {d in dias}:
 	/*x[d]+*/I_fab[d]<=B_fab;
-subject to no_superar_capacidad_may {d in dias: d<=30}:
+subject to no_superar_capacidad_may {d in dias}:
 	/*y[d]+*/I_may[d]<=B_may;
-subject to no_superar_capacidad_dist {d in dias: d<=30}:
+subject to no_superar_capacidad_dist {d in dias}:
 	/*z[d]+*/I_dist[d]<=B_dist;
 
 #almacen dia 1 igual al dia 30 todos-------------------------------------
@@ -74,19 +74,19 @@ subject to alamcenaje_inicial_dist:
 
 #almacenaje inicial y final mayorista--------------------------------------
 
-subject to alamcenaje_inicial_may_cond:
-	I_may[1]+E-z[1]<=B_may;
 	subject to envio_planificado:
-	I_fab[29]==I_fab[28]+x[28]-y[28]-E;
+	/*I_fab[19]=I_fab[18]+x[19]-y[19]-E;*/
+	y[30]=E;
 
 #almacenaje inicial todo
 
 subject to almacenaje_inicial_dato_fab:
-	I_fab[1]==2000;
+	I_fab[1]=2000+x[1]-y[1];
 subject to almacenaje_inicial_dato_may:
-	I_may[1]==3000;
+	I_may[1]==3000+E-z[1];
+
 subject to almacenaje_inicial_dato_dist:
-	I_dist[1]==500;
+	I_dist[1]=500+z[1]-demanda[1];
 
 #capacidad de  produccion-----------------------------------------------
 
@@ -94,34 +94,13 @@ subject to Cap_prod{d in dias}:
 	x[d]<=P[d];
 
 #update inventario----------------------------------------------------------
-subject to updateI_fab{d in dias: d<30 && d!=28}:
-	I_fab[d+1]==I_fab[d]+x[d]-y[d];
-	/*subject to updateI_may{d in dias: 1<=d <=2}:#cambio!!!!!!!!!!!!
-	I_may[d+1]==I_may[d]-z[d];*/
+subject to updateI_fab{d in dias: 1<d}:
+	I_fab[d]=I_fab[d-1]+x[d]-y[d];
+	subject to updateI_may:#cambio!!!!!!!!!!!!
+	I_may[2]==I_may[1]-z[2];
 subject to updateI_may2{d in dias: 1<d <30}:#cambio!!!!!!!!!!!!
-	I_may[d+1]==I_may[d]+y[d-1]-z[d];
+	I_may[d+1]=I_may[d]+y[d-1]-z[d+1];
 subject to updateI_dist{d in dias: d <30}:
-	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];#cumple la demanda
+	I_dist[d+1]=I_dist[d]+z[d+1]-demanda[d+1];#cumple la demanda
 #demanda--------------------
-subject to cumplir_demand{d in dias}:
-	demanda[d]<=z[d]+I_dist[d];
-subject to envio_max_y{d in dias:d>2 }:
-	y[d-2]+I_may[d]<= B_may+z[d];
-subject to envio_max_z{d in dias}:
-	z[d]+I_dist[d]<=B_dist+demanda[d];
-subject to naturalezax {d in dias}:
-	x[d]>=0;
-	subject to naturalezay {d in dias}:
-	y[d]>=0;
-	subject to naturalezaz {d in dias}:
-	z[d]>=0;
-	subject to naturalezaIfab {d in dias}:
-	I_fab[d]>=0;
-	subject to naturalezaImay {d in dias}:
-	I_may[d]>=0;
-	subject to naturalezaIdist {d in dias}:
-	I_dist[d]>=0;
-		
-	
-	
-	
+
