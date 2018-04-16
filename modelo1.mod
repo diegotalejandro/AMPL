@@ -100,3 +100,6 @@ subject to updateI_may{d in dias: d <30}:
 	I_may[d+1]==I_may[d]+y[d]-z[d];
 subject to updateI_dist{d in dias: d <30}:
 	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];#cumple la demanda
+	
+	subject to haberqpasa{d in dias}:
+	x[d]>=y[d]>=z[d];
