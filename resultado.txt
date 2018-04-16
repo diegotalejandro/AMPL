@@ -1,8 +1,17 @@
 solve;								#Solucionar el modelo
 presolve, constraint alamcenaje_final_may:
 	all variables eliminated, but lower bound = 7000 > 0
+presolve: constraint no_superar_capacidad_dist[1] cannot hold:
+	body <= 3000 cannot be >= 3500; difference = -500
+presolve: constraint updateI_dist[28] cannot hold:
+	body <= -5000 cannot be >= -4000; difference = -1000
+presolve: constraint updateI_dist[27] cannot hold:
+	body <= -15000 cannot be >= -6000; difference = -9000
+presolve: constraint updateI_dist[26] cannot hold:
+	body <= -12500 cannot be >= -6000; difference = -6500
+25 presolve messages suppressed.
 display Suma_Costos;				#Ejemplo de como mostrar el valor de la funci??????????????????n objetivo
-Suma_Costos = 280000
+Suma_Costos = 10490000
 
 display x;
 x [*] :=
@@ -20,9 +29,11 @@ y [*] :=
 
 display z;
 z [*] :=
- 1 0    4 0    7 0   10 0   13 0   16 0   19 0   22 0   25 0   28 0
- 2 0    5 0    8 0   11 0   14 0   17 0   20 0   23 0   26 0   29 0
- 3 0    6 0    9 0   12 0   15 0   18 0   21 0   24 0   27 0   30 0
+ 1     0    6     0   11  3000   16  3000   21  3000   26     0
+ 2     0    7  3000   12 30500   17  3000   22  3000   27     0
+ 3     0    8  3000   13     0   18  3000   23  3000   28     0
+ 4     0    9  3000   14  3000   19 30500   24  3000   29     0
+ 5     0   10  3000   15  3000   20     0   25  3000   30     0
 ;
 
 display I_fab;
@@ -42,3 +53,44 @@ I_may [*] :=
 ;
 
 display I_dist;							#Ejemplo de como mostrar el valor de una variable
+I_dist [*] :=
+ 1   500    6 18000   11  2000   16  1000   21  3000   26     0
+ 2     0    7  3000   12     0   17  2000   22  1000   27     0
+ 3     0    8  1000   13 18000   18  2000   23  1000   28     0
+ 4     0    9  1000   14  3000   19     0   24  2000   29     0
+ 5     0   10  2000   15  1000   20 18000   25  2000   30   500
+;
+
+ampl: 2000   15  1000   20 18000   25  2000   30   500
+
+syntax error
+context:   >>> 2000  <<<   15  1000   20 18000   25  2000   30   500
+;
+
+ampl: reset;
+
+reset is not defined
+context:  ampl:  >>> reset; <<< 
+ampl: reset;
+ampl: reset;
+ampl: reset;
+ampl: reset;
+ampl: 
+ampl: model modelo1.mod;
+
+reset;
+ampl: model modelo1.mod;
+
+
+
+
+
+
+
+
+reset;
+ampl: reset;
+ampl: reset;
+ampl: reset;
+ampl: 
+ampl: 
