@@ -16,7 +16,7 @@ option solver gurobi	;				#Elegimos el solver Gurobi
 option gurobi_options "outlev 1";	#Configuracion de opcion de Gurobi para que muestre el log
 option log_file resultado.txt;			#Guardamos la salida en el archivo salida.txt
 solve;								#Solucionar el modelo
-display Suma_Costos;				#Ejemplo de como mostrar el valor de la funci������������������������������������������������������n objetivo
+display Suma_Costos;				#Ejemplo de como mostrar el valor de la funci������������������������������������������������������������������������������������������������������������������������������������������������������������������n objetivo
 display x;
 display y;
 display z;

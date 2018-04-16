@@ -67,17 +67,17 @@ subject to no_superar_capacidad_dist {d in dias: d<=30}:
 
 subject to alamcenaje_inicial_fab:
 	I_fab[1]==I_fab[30];
-subject to alamcenaje_inicial_may:
+subject to alamcenaje_inicial_may:#cambio!!!!!!!!!!!!!-!!!
 	I_may[1]==I_may[30];
 subject to alamcenaje_inicial_dist:
 	I_dist[1]==I_dist[30];
 
 #almacenaje inicial y final mayorista--------------------------------------
 
-subject to alamcenaje_inicial_may_cond:
-	I_may[1]+E-z[1]<=B_may;
-/*subject to alamcenaje_final_may:
-	I_may[30]>=E;*/
+/*subject to alamcenaje_inicial_may_cond:
+	I_may[1]+E-z[1]<=B_may;*/
+	subject to envio_planificado:
+	I_fab[29]==I_fab[28]+x[28]-y[28]-E;
 
 #almacenaje inicial todo
 
@@ -94,10 +94,12 @@ subject to Cap_prod{d in dias}:
 	x[d]<=P[d];
 
 #update inventario----------------------------------------------------------
-subject to updateI_fab{d in dias: d <30}:
+subject to updateI_fab{d in dias: d<30 && d!=28}:
 	I_fab[d+1]==I_fab[d]+x[d]-y[d];
-subject to updateI_may{d in dias: d <30}:
-	I_may[d+1]==I_may[d]+y[d]-z[d];
+	/*subject to updateI_may{d in dias: 1<=d <=2}:#cambio!!!!!!!!!!!!
+	I_may[d+1]==I_may[d]-z[d];*/
+subject to updateI_may2{d in dias: 1<d <30}:#cambio!!!!!!!!!!!!
+	I_may[d+1]==I_may[d]+y[d-1]-z[d];
 subject to updateI_dist{d in dias: d <30}:
 	I_dist[d+1]==I_dist[d]+z[d]-demanda[d];#cumple la demanda
 #demanda--------------------
