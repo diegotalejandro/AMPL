@@ -12,6 +12,8 @@ param G_may {d in dias};#costo por cada litro almacenado mayorista
 param G_dist {d in dias};#costo por cada litro almacenado distribuidor
 param w {d in dias};#costo por litro de la fabrica al mayorista el dia d
 param v {d in dias};#costo por litro de el mayorista al distribuidor el dia d
+param M;#parametro para activar la binaria
+param F{d in dias};#costo fijo si hay produccion ese dia
 
 var x {d in dias} >= 0;#cuanto se produce por el dia d
 var y {d in dias} >= 0;#cuanto se envia al mayorista el dia d
@@ -19,9 +21,10 @@ var z {d in dias} >= 0;#cuanto se envia al distribuidor el dia d
 var I_fab {d in dias} >= 0;#Litros almacendados en las bodegas fabrica
 var I_may {d in dias} >= 0;#Litros almacendados en las bodegas mayoristas
 var I_dist {d in dias} >= 0;#Litros almacendados en las bodegas distribuidora
+var X{d in dias} binary;#si o no hay produccion el dia d
 
 minimize Suma_Costos: 
-	sum{d in dias} C_d[d]*x[d] + sum{d in dias} (G_fab[d]*I_fab[d]+G_may[d]*I_may[d]+G_dist[d]*I_dist[d]) +sum{d in dias} (y[d]*w[d]) + sum{d in dias} (z[d]*v[d]);#envio
+	sum{d in dias} C_d[d]*x[d] + sum{d in dias} (G_fab[d]*I_fab[d]+G_may[d]*I_may[d]+G_dist[d]*I_dist[d]) +sum{d in dias} (y[d]*w[d]) + sum{d in dias} (z[d]*v[d])+sum{d in dias}F[d]*X[d];#envio
 	
 #Restricciones:
 #No superar capacidad de almacenaje-----------------------------------
@@ -72,4 +75,6 @@ subject to updateI_may2{d in dias: 1<d <30}:
 	I_may[d+1]=I_may[d]+y[d-1]-z[d+1];
 subject to updateI_dist{d in dias: d <30}:
 	I_dist[d+1]=I_dist[d]+z[d+1]-demanda[d+1];#cumple la demanda
-
+#activacion binaria----------------------------------------------------------
+subject to activar_binaria{d in dias}:
+	x[d]<=X[d]*M;
